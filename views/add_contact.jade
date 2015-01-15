@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 Add new contact
+  
+  form(action="/save_contact", method="post", data-ajax="false")
+    input(type="text", name="name", placeholder="Name")
+    input(type="text", name="address", placeholder="Address")
+    input(type="text", name="phonenumber", placeholder="Phone number")
+    br
+    input(type="submit", value="Save")

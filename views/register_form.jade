@@ -3,7 +3,7 @@ extends layout
 block content
     div(class="container")
         h2 Register
-        form(action="/register_user", method="post")
+        form(action="/register_user", method="post", data-ajax="false")
             input(type="text", name="username", placeholder="Username")
             input(type="text", name="password", placeholder="Password")
             input(type="text", name="email", placeholder="Email address")

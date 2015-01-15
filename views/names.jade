@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 Address book of #{user}
+
+  ul(data-role="listview")
+    each contact in contacts
+      li
+        a(href="/contact?name=#{contact.name}")= contact.name
+        
+  a(href="/add_contact") Add new contact
+  br
+  a(href="/logout") Log out
