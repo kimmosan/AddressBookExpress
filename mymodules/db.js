@@ -16,16 +16,20 @@ var usernameSchema = new mongoose.Schema({
     email:String
 });
 
-var addressbookSchema = new mongoose.Schema({
+var contactsSchema = new mongoose.Schema({
     user:String,
     name:String,
     address:String,
-    phonenumber:String
+    phonenumber:String,
+    birthday:String,
+    photo:String
 });
 
-var usernameModel = mongoose.model("UsernameM", usernameSchema);
-var addressbookModel = mongoose.model("AddressbookM", addressbookSchema);
+var usernameModel = mongoose.model("UsernameMod", usernameSchema);
+var contactsModel = mongoose.model("ContactsMod", contactsSchema);
 
+// REGISTER NEW USER
+// - - - - - - - - -
 exports.registerUser = function(req, res) {
     console.log(req.body);
     
@@ -45,18 +49,24 @@ exports.registerUser = function(req, res) {
     });
 }
 
+// LOGIN PROCESS
+// - - - - - - -
 exports.login = function(req, res) {
+    
+    //Check if the username is found from database
     usernameModel.find({username: req.body.username}, function(err, data){
         console.log(data);
         if(err || data[0] == null){
-            console.log("Erroria pukkaa");
+            console.log("Login erroria pukkaa");
             res.redirect('/');
         }
         else {
+            
+            //Username found, check if password is correct
             if(req.body.password === data[0].password) {
                 req.session.userLoggedIn = true;
                 req.session.username = data[0].username;
-                console.log("User logged in");
+                console.log("User " + req.session.username + " logged in");
                 res.redirect('/names'); 
             }
             else {
@@ -67,10 +77,12 @@ exports.login = function(req, res) {
     });
 }
 
+// LOAD CONTACTS
+// - - - - - - -
 exports.loadNames = function(req, res) {
     console.log("loadNames function called");
     if (req.session.userLoggedIn == true){
-        addressbookModel.find({user:req.session.username},function(err, data){
+        contactsModel.find({user:req.session.username},function(err, data){
             if (err) {
                 console.log(err);
                 res.redirect('/');
@@ -87,23 +99,108 @@ exports.loadNames = function(req, res) {
     }
 }
 
-exports.addContact = function(req, res) {
-    console.log(req.session.username);
-    var temp = new addressbookModel({
-        user:req.session.username,
-        name: req.body.name,
-        address:req.body.address,
-        phonenumber:req.body.phonenumber
-    });
+// SHOW CONTACT
+// - - - - - -
+exports.showContact = function(req, res) {
+    console.log("showContact called with contact name: " + req.query.id);
+    if (req.session.userLoggedIn == true){
+        contactsModel.findById(req.query.id,function(err, data){
+            if (err) {
+                console.log(err);
+                res.redirect('/');
+            }
+            else {
+                console.log("Data from addressbook");
+                console.log(data);
+                res.render('contact', data);
+            }
+        });
+    }
+    else {
+        res.redirect('/');
+    }    
     
-    temp.save(function(err){
-        if(err){
-            console.log(err);
+}
+
+// EDIT CONTACT
+// - - - - - - 
+exports.editContact = function(req, res) {
+    console.log(req.session.username + " is editing contact " + req.query._id);
+    if (req.session.userLoggedIn == true){
+        contactsModel.findById(req.query.id,function(err, data){
+            if (err) {
+                console.log(err);
+                res.redirect('/names');
+            }
+            else {
+                console.log("Data from addressbook");
+                console.log(data);
+                res.render('add_contact', data);
+            }   
+        });
+    }
+}
+
+// ADD NEW CONTACT
+// - - - - - - - -
+exports.addContact = function(req, res) {
+    console.log(req.session.username + " is adding new contact");
+    
+    if(req.body.id) {
+        console.log("ID found --> editing contact");
+        contactsModel.findById(req.body.id, function(err,data){
+            if(err){
+                console.log(err);
+            }
+            else {
+                
+            }
+        });
+    }
+    else{
+        
+        if(req.files.photo) {
+            var photo = req.files.photo.name;    
         }
         else {
-            console.log("Saved");
-            res.redirect('/names');
-        }       
+            var photo = "nophoto.jpg";
+        }
+
+        var temp = new contactsModel({
+            user:req.session.username,
+            name: req.body.name,
+            address:req.body.address,
+            phonenumber:req.body.phonenumber,
+            birthday: req.body.birthday,
+            photo: photo
+        });
+
+        temp.save(function(err){
+            if(err){
+                console.log(err);
+            }
+            else {
+                console.log("Contact saved to database");
+                res.redirect('/names');
+            }       
+        });
+    }
+}
+
+// DELETE CONTACT
+// - - - - - - -
+exports.deleteContact = function(req, res){
+    console.log("Trying to delete contact " + req.query.id);
+    contactsModel.findById(req.query.id, function(err, data){
+        if(err) {
+            console.log(err);
+            res.redirect("/names");
+        }
+        else {
+            console.log("Contact found, now remove");
+            data.remove();
+            res.redirect("/names");
+        }
     });
 }
 
@@ -113,19 +210,19 @@ exports.listUsers = function(req, res) {
     console.log("All users:\n-------");
     usernameModel.find(function(err, data){
         console.log(data);
-        res.redirect('/');
     });
     
     console.log("All addresses:\n-------");
-    addressbookModel.find(function(err, data){
+    contactsModel.find(function(err, data){
         console.log(data);
-        res.redirect('/');
     });
+    res.redirect('/');
         
 }
 
+// LOGOUT
 exports.logout = function(req, res) {
     req.session.destroy(function(err) {
-
+        res.redirect('/');
     });
 }

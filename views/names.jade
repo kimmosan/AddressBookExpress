@@ -1,13 +1,13 @@
 extends layout
 
 block content
-  h1 Address book of #{user}
+  div(class="container")
+    h1 Address book of #{user}
 
-  ul(data-role="listview")
-    each contact in contacts
-      li
-        a(href="/contact?name=#{contact.name}")= contact.name
+    ul(data-role="listview")
+      each contact in contacts
+        li
+          a(href="/contact?id=#{contact._id}", data-transition="flip")= contact.name
         
-  a(href="/add_contact") Add new contact
-  br
-  a(href="/logout") Log out
+    a(href="/add_contact", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-plus ui-btn-icon-left", data-transition="pop") Add new contact
+    a(href="/logout", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left", data-transition="slide") Log out

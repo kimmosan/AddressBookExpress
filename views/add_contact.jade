@@ -1,11 +1,22 @@
 extends layout
 
 block content
-  h1 Add new contact
+  div(class="container")
+    h1= (_id?"Edit contact":"Add new contact")
   
-  form(action="/save_contact", method="post", data-ajax="false")
-    input(type="text", name="name", placeholder="Name")
-    input(type="text", name="address", placeholder="Address")
-    input(type="text", name="phonenumber", placeholder="Phone number")
-    br
-    input(type="submit", value="Save")
+    form(action="/save_contact", method="post", data-ajax="false", enctype="multipart/form-data")
+      if !_id
+        input(type="text", name="name", placeholder="Name")
+        input(type="text", name="address", placeholder="Address")
+        input(type="text", name="phonenumber", placeholder="Phone number")
+        input(type="date", name="birthday")
+        input(type="file", name="photo", accept="image/*")
+      else
+        input(type="hidden", name="id", value="#{_id}")
+        input(type="text", name="name", value="#{name}")
+        input(type="text", name="address", value="#{address}")
+        input(type="text", name="phonenumber", value="#{phonenumber}")
+        input(type="date", name="birthday", value="#{birthday}")
+        //input(type="file", name="photo", accept="image/*")      
+      br
+      input(type="submit", value="Save")

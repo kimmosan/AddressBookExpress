@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  div(class="container")
+    h1= (name?name:"...")
+    div(id="infoContainer")
+      div(id="imgDiv")
+        img(src="/get_image?photoname=#{photo}", height="200", weight="200")
+      div(id="contactInfoDiv")
+        table(data-role="table", data-mode="reflow")
+          thead
+            tr
+              th Address
+              th Phone number
+              th Birthday
+          tbody
+            tr
+              if address
+                td #{address}
+              else
+                td ...
+              if phonenumber
+                td #{phonenumber}
+              else
+                td ...
+              if birthday
+                td #{birthday}
+              else
+                td ...
+    br
+    a(href="/names", data-transition="flip", data-direction="reverse", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-carat-l ui-btn-icon-left") Back to contact list
+    a(href="/delete_contact?id=#{_id}", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left") Delete this contact
+    a(href="/edit_contact?id=#{_id}", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left") Edit
+  

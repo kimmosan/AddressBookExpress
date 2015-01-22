@@ -1,14 +1,36 @@
 body {
   padding: 50px;
 }
+.ultimateContainer {
+  padding: 10px;
+}
 .container {
   top: 10px;
   padding: 50px;
   background-color: #eee;
-  width: 250px;
+  width: 550px;
   margin: 0 auto;
   border-style: solid;
   border-width: 1px;
   border-color: #aaa;
   border-radius: 0px 100px 0px 0px;
+}
+#infoContainer {
+  padding: 2px;
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+}
+#imgDiv {
+  height: 200px;
+}
+#contactInfoDiv {
+  margin-left: 10px;
+  height: 100%;
+  width: 330px;
+}
+p {
+  display: inline;
+}
+.ui-table {
+  width: 150%;
 }
