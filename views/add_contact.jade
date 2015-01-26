@@ -1,15 +1,15 @@
 extends layout
 
 block content
-  div(class="container")
     h1= (_id?"Edit contact":"Add new contact")
   
     form(action="/save_contact", method="post", data-ajax="false", enctype="multipart/form-data")
       if !_id
         input(type="text", name="name", placeholder="Name")
-        input(type="text", name="address", placeholder="Address")
+        input(type="text", name="address", placeholder="Street address")
         input(type="text", name="phonenumber", placeholder="Phone number")
         input(type="date", name="birthday")
+        input(type="text", name="email", placeholder="Email address")
         input(type="file", name="photo", accept="image/*")
       else
         input(type="hidden", name="id", value="#{_id}")
@@ -17,6 +17,7 @@ block content
         input(type="text", name="address", value="#{address}")
         input(type="text", name="phonenumber", value="#{phonenumber}")
         input(type="date", name="birthday", value="#{birthday}")
+        input(type="file", name="email", value="#{email}")
         //input(type="file", name="photo", accept="image/*")      
       br
       input(type="submit", value="Save")

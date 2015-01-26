@@ -6,7 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var db = require('./mymodules/db.js');
-var multer  = require('multer')
+var multer  = require('multer') // Multer used for pictures
+var email = require('./mymodules/email.js');
 
 var routes = require('./routes/index');
 
@@ -14,6 +15,7 @@ var app = express();
 
 app.use(session({cookie:{path:'/',httpOnly:true,maxAge:null}, secret:'g54gw5gwetgh89etgrtg78we5tg89etegh89666', resave:false, saveUninitialized:true}));
 
+// Setup multer
 app.use(multer({ dest: './photos/'}));
 
 // view engine setup
@@ -43,6 +45,8 @@ app.use('/get_image', routes);
 app.use('/delete_contact', db.deleteContact);
 app.use('/logout', db.logout);
 app.use('/edit_contact', db.editContact);
+app.use('/send_email', email.sendEmail);
+app.use('/email', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

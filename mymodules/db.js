@@ -22,6 +22,7 @@ var contactsSchema = new mongoose.Schema({
     address:String,
     phonenumber:String,
     birthday:String,
+    email:String,
     photo:String
 });
 
@@ -58,6 +59,7 @@ exports.login = function(req, res) {
         console.log(data);
         if(err || data[0] == null){
             console.log("Login erroria pukkaa");
+            req.session.loginError = "Username or password is incorrect.";
             res.redirect('/');
         }
         else {
@@ -71,7 +73,7 @@ exports.login = function(req, res) {
             }
             else {
                 console.log("Wrong password");
-                res.redirect('/');
+                res.redirect('/', "Username or password is incorrect.");
             }
         }
     });
@@ -125,7 +127,7 @@ exports.showContact = function(req, res) {
 // EDIT CONTACT
 // - - - - - - 
 exports.editContact = function(req, res) {
-    console.log(req.session.username + " is editing contact " + req.query._id);
+    console.log(req.session.username + " is editing contact " + req.query.id);
     if (req.session.userLoggedIn == true){
         contactsModel.findById(req.query.id,function(err, data){
             if (err) {
@@ -146,6 +148,7 @@ exports.editContact = function(req, res) {
 exports.addContact = function(req, res) {
     console.log(req.session.username + " is adding new contact");
     
+    // If ID is passed in req, then we are editing the contact
     if(req.body.id) {
         console.log("ID found --> editing contact");
         contactsModel.findById(req.body.id, function(err,data){
@@ -153,10 +156,27 @@ exports.addContact = function(req, res) {
                 console.log(err);
             }
             else {
+                data.user = req.session.username;
+                data.name = req.body.name;
+                data.address = req.body.address;
+                data.phonenumber = req.body.phonenumber;
+                data.birthday = req.body.birthday;
+                data.email = req.body.email;
+                data.photo = data.photo;
+                data.save(function(err){
                 
+                    if(err){
+                        console.log(err);
+                    }
+                    else{
+                        res.redirect('/contact?id=' + req.body.id);
+                    }
+                });
             }
         });
     }
+    
+    //ID is not passed, so adding new contact
     else{
         
         if(req.files.photo) {
@@ -172,6 +192,7 @@ exports.addContact = function(req, res) {
             address:req.body.address,
             phonenumber:req.body.phonenumber,
             birthday: req.body.birthday,
+            email: req.body.email,
             photo: photo
         });
 

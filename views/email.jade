@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h2 Send email
+  form(action="/send_email", method="post", data-ajax="false")
+    input(type="text", value="teeteppo@gmail.com", name="from")
+    input(type="text", value="#{to}", name="to")
+    input(type="text", name="subject", placeholder="Subject")
+    textarea(name="message")
+    input(type="submit", value="Send")

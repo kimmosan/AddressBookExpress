@@ -1,18 +1,21 @@
 extends layout
 
 block content
-  div(class="container")
+  div(class="my_header")
+    h1 Address book
+  div(class="my_content")
     h1= (name?name:"...")
     div(id="infoContainer")
       div(id="imgDiv")
-        img(src="/get_image?photoname=#{photo}", height="200", weight="200")
+        img(src="/get_image?photoname=#{photo}", height="200px")
       div(id="contactInfoDiv")
         table(data-role="table", data-mode="reflow")
           thead
             tr
-              th Address
+              th(class="ui-icon ui-icon-action") Address
               th Phone number
               th Birthday
+              th Email
           tbody
             tr
               if address
@@ -27,8 +30,14 @@ block content
                 td #{birthday}
               else
                 td ...
+              if email
+                td #{email}
+              else
+                td ...
     br
     a(href="/names", data-transition="flip", data-direction="reverse", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-carat-l ui-btn-icon-left") Back to contact list
     a(href="/delete_contact?id=#{_id}", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-delete ui-btn-icon-left") Delete this contact
     a(href="/edit_contact?id=#{_id}", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-edit ui-btn-icon-left") Edit
+    if email
+      a(href="/email?to=#{email}", class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-icon-mail ui-btn-icon-left") Send email
   

@@ -1,19 +1,35 @@
-body
-  padding: 50px
-   
+//Container which adds 10 pixel padding on top
 .ultimateContainer
   padding: 10px
+  margin: 0 auto
+  width: 600px
 
-.container
-  top: 10px
-  padding: 50px
-  background-color: #EEEEEE
-  width: 550px
-  margin: 0 auto 
+/*div
   border-style: solid
   border-width: 1px
+  border-color: red*/
+
+.my_header
+  background-color: #444444
+  color: #FFFFFF
+  padding: 10px 50px 10px 50px
+  border-radius: 10px 10px 0px 0px
+  border-style: solid
+  border-width: 1px 1px 0px 1px
   border-color: #AAAAAA
-  border-radius: 0px 100px 0px 0px
+  display: -webkit-box
+  -webkit-box-orient: horizontal
+
+.my_content
+  padding: 50px
+  background-color: #EEEEEE
+  border-radius: 0px 0px 10px 10px
+  border-style: solid
+  border-width: 0px 1px 1px 1px
+  border-color: #AAAAAA
+
+#user_button
+  margin-left: 20px
   
 #infoContainer
   padding: 2px
@@ -25,6 +41,8 @@ body
   //padding: 2px
   //border: 1px solid blue
   height: 200px
+  width: 200px
+  overflow: hidden
 
 #contactInfoDiv
   //padding: 2px
@@ -40,3 +58,5 @@ p
   //border: 1px solid green
   width: 150%
   
+#error
+  color: red
